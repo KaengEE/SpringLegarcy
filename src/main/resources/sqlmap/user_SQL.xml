@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	<insert id="insert" parameterType="hashMap" 
+			useGeneratedKeys="true" keyProperty="user_id">
+		INSERT INTO user (name, email, password, salary)
+		VALUES (#{name},#{email},#{password},#{salary})
+	</insert>
+
+	<select id="select_detail" parameterType="hashMap" resultType="hashMap">
+		SELECT
+        name,
+        email,
+        password,
+        salary,
+        insert_date
+        FROM user
+        WHERE user_id = #{userId}
+	</select>
+	
+	<update id="update" parameterType="hashMap"> 
+		UPDATE user SET  
+		name = #{name},  
+		email = #{email},  
+		password = #{password},
+		salary = #{salary}
+		WHERE  
+		user_id = #{userId}  
+	</update>
+	
+	<delete id="delete" parameterType="hashMap">
+		DELETE FROM user
+		WHERE
+		user_id = #{userId}
+	</delete>
+	
+	<select id="select_list" parameterType="hashMap" resultType="hashMap" >
+		SELECT
+		user_id,
+        name,
+        email,
+        password,
+        salary,
+        insert_date
+        FROM user
+        WHERE 1 = 1
+        <if test="keyword != null and keyword != ''">
+        	and (name like CONCAT('%',#{keyword},'%')
+        	or email like CONCAT('%',#{keyword},'%'))
+        </if>
+        ORDER BY insert_date desc
+	</select>
+</mapper>

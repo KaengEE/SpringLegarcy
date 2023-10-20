@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="book">
+	<insert id="insert" parameterType="hashMap" 
+			useGeneratedKeys="true" keyProperty="book_id">
+		INSERT INTO book (title, category, price)
+		VALUES (#{title},#{category},#{price})
+	</insert>
+
+	<select id="select_detail" parameterType="hashMap" resultType="hashMap">
+		SELECT
+        title,
+        category,
+        price,
+        insert_date
+        FROM book
+        WHERE book_id = #{bookId}
+	</select>
+	
+	<update id="update" parameterType="hashMap"> 
+		UPDATE book SET  
+		title = #{title},  
+		category = #{category},  
+		price = #{price}  
+		WHERE  
+		book_id = #{bookId}  
+	</update>
+	
+	<delete id="delete" parameterType="hashMap">
+		DELETE FROM book
+		WHERE
+		book_id = #{bookId}
+	</delete>
+	
+	<select id="select_list" parameterType="hashMap" resultType="hashMap" >
+		SELECT
+		book_id,
+        title,
+        category,
+        price,
+        insert_date
+        FROM book
+        WHERE 1 = 1
+        <if test="keyword != null and keyword != ''">
+        	and (title like CONCAT('%',#{keyword},'%')
+        	or category like CONCAT('%',#{keyword},'%'))
+        </if>
+        ORDER BY insert_date desc
+	</select>
+</mapper>
